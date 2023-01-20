@@ -1,5 +1,4 @@
 function getHtml() {
-  console.log("html part");
   return `
     <h1>Cinema :</h1>
     <h2>1/ UGC</h2>

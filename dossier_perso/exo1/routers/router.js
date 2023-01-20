@@ -1,6 +1,7 @@
 const url = require("url");
 const error404 = require("../views/erro404");
 const cinemaRouter = require("./cinema.router");
+const filmRouter = require("./film.router");
 const homeRouter = require("./home.router");
 
 // /cinema/ugc/film/avatar tester URL
@@ -12,6 +13,7 @@ function router(req, res) {
 
   homeRouter(urlParams, methodHttp, res);
   cinemaRouter(urlParams, methodHttp, res);
+  filmRouter(urlParams, methodHttp, res);
 
   // res.writeHead(404, "Error : Page not found");
   // res.write(error404());
