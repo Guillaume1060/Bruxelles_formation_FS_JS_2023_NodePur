@@ -1,0 +1,24 @@
+{
+    "Client": { 
+        "numéro": "105",
+        "nom": "Dupont",
+        "Adresse" : "10 rue victor Hugo",
+        "Localité" : "Bruxelles"
+    },
+    "Commande": { 
+        "numéro": "1",
+        "date": "23/01/2023",
+        "produit" : "Boutons",
+        "Total" : ""
+    }, 
+    "Article": { 
+        "Id": "1",
+        "quantité": "23/01/2023",
+        "Total" : ""
+    },
+    "Produit": { 
+        "numéro": "105",
+        "Libellé": "Bouton Bleu avec des rayures",
+        "prix" : "2,99"
+    } 
+}

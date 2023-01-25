@@ -1,0 +1,11 @@
+use ('Exercise_1')
+
+db.produits.insertOne(
+  {
+    "nprod":"", 
+    "libelle":"", 
+    "prix":"", 
+    "datesdelaModif": new Date('2023-01-16'),
+    "stock": "" 
+  }
+)
