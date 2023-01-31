@@ -2,6 +2,7 @@ const url = require("url")
 
 const productRouter = require("./product.router")
 const homeRouter = require("./home.router")
+const contactRouter = require("./contact.router")
 
 function router(req, res)
 {
@@ -10,12 +11,13 @@ function router(req, res)
     let urlParams = urlParse.pathname.split("/")
     let methodHttp = req.method
 
+    if(methodHttp == "GET" && urlParams[1] == "favicon.ico"){
+        res.end()
+    } 
 
     homeRouter(urlParams, methodHttp, res)
     productRouter(urlParams, methodHttp, res)
-
-
-    res.writeHead(404, "Error : Page not found").end()
+    contactRouter(urlParams, methodHttp, res, req)
 }
 
 module.exports = router
