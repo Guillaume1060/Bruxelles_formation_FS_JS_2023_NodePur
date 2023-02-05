@@ -1,23 +1,26 @@
-const url = require("url")
+const url = require("url");
 
-const productRouter = require("./product.router")
-const homeRouter = require("./home.router")
-const contactRouter = require("./contact.router")
+const productRouter = require("./product.router");
+const homeRouter = require("./home.router");
+const contactRouter = require("./contact.router");
 
-function router(req, res)
-{
-    let urlParse = url.parse(req.url, true)
-    let queryString = urlParse.query
-    let urlParams = urlParse.pathname.split("/")
-    let methodHttp = req.method
+function router(req, res) {
+  let urlParse = url.parse(req.url, true);
+  let queryString = urlParse.query;
+  let urlParams = urlParse.pathname.split("/");
+  let methodHttp = req.method;
+  console.log(urlParse);
+  console.log(queryString);
+  console.log(urlParams);
+  console.log(methodHttp);
 
-    if(methodHttp == "GET" && urlParams[1] == "favicon.ico"){
-        res.end()
-    } 
+  if (methodHttp == "GET" && urlParams[1] == "favicon.ico") {
+    res.end();
+  }
 
-    homeRouter(urlParams, methodHttp, res)
-    productRouter(urlParams, methodHttp, res)
-    contactRouter(urlParams, methodHttp, res, req)
+  homeRouter(urlParams, methodHttp, res);
+  productRouter(urlParams, methodHttp, res);
+  contactRouter(urlParams, methodHttp, res, req);
 }
 
-module.exports = router
+module.exports = router;
