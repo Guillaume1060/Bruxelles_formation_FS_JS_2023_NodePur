@@ -3,44 +3,63 @@ const app = express();
 const port = process.env.PORT || 3000;
 // const employeeRoutes = require("./routes/employeeRoute");
 const employees = require("./datas/employees.js");
+const clients = require("./datas/clients");
+const factures = require("./datas/factures");
 
 // ci dessous, permet l'accès au req.body
 app.use(express.json());
 
 // Test middleware
 app.use((req, res, next) => {
-  req.requestTime = new Date().toISOString();
-  console.log(employees.values());
+  // req.requestTime = new Date().toISOString();
+
   next();
 });
 
 // ROUTES
 // EMPLOYEE
 // GET /api/v1/employee
-app.get("/employee", (req, res) => {
+app.get("/api/v1/employee", (req, res) => {
   res.json({
-    employe: employees,
+    employees,
   });
 });
 // GET /api/v1/employee/:id
-app.get("/employee/:id", (req, res) => {
+app.get("/api/v1/employee/:id", (req, res) => {
   const employe = employees.find((employe) => employe.id == req.params.id);
   res.json({
     employe,
   });
 });
+// POST /api/v1/employee/:id/augmentation
+app.post("/api/v1/employee/:id/augmentation", (req, res) => {
+  const montantAugmentation = Number(req.body.augmentation);
+  const employeAugmente = employees.find(
+    (employe) => employe.id == req.params.id
+  );
+  const salary = parseInt(employeAugmente.salary);
+  let newSalary = salary + montantAugmentation;
+  employeAugmente.salary = newSalary;
+  res.json({
+    employeAugmente,
+    Message: `Vous avez obtenu une augmentation de ${montantAugmentation} euros`,
+  });
+});
 // PUT /api/v1/employee/:id
-app.put("/employee/:id", (req, res) => {
+app.put("/api/v1/employee/:id", (req, res) => {
   const employe = employees.find((employe) => employe.id == req.params.id);
   employe.adress = req.body.adress;
   res.json({
     employe,
-    message: "Adresse modifié",
+    message: "Adresse modifiée",
   });
 });
 // DELETE /api/v1/employee/:id
-app.delete("/employee/:id", (req, res) => {
-  const employe = employees.find((employe) => employe.id == req.params.id);
+app.delete("/api/v1/employee/:id", (req, res) => {
+  const indexEmployeeToFire = employees.findIndex(
+    (employe) => employe.id == req.params.id
+  );
+  employees.splice(indexEmployeeToFire, 1);
   res.json({
     message: "employé licencié",
   });
@@ -48,38 +67,42 @@ app.delete("/employee/:id", (req, res) => {
 
 // COMPTA
 // GET /api/v1/compta
-app.get("/compta", (req, res) => {
+app.get("/api/v1/compta", (req, res) => {
   res.json({
-    factures: [
-      { id: 1, société: "Auxel", montant: 2500 },
-      { id: 2, société: "ArbreAPain", montant: 1990 },
-    ],
+    factures,
   });
 });
 // GET /api/v1/compta/:id
-app.get("/compta/:id", (req, res) => {
+app.get("/api/v1/compta/:id", (req, res) => {
+  const facture = factures.find((facture) => facture.id == req.params.id);
   res.json({
-    factures: [{ id: 1, société: "Auxel", montant: 880 }],
+    facture,
   });
 });
 // PUT /api/v1/compta/:id
-app.put("/compta/:id", (req, res) => {
-  let newmontant = req.body.montant;
+app.put("/api/v1/compta/:id", (req, res) => {
+  const facture = factures.find((facture) => facture.id == req.params.id);
+  facture.amount = req.body.amount;
   res.json({
-    factures: [{ id: 1, société: "Auxel", montant: newAdress }],
-    message: "Adresse modifié",
+    facture,
+    message: "Montant modifiée",
   });
 });
+
 // DELETE /api/v1/compta/:id
-app.delete("/compta/:id", (req, res) => {
+app.delete("/api/v1/compta/:id", (req, res) => {
+  const indexFactureToDelete = factures.findIndex(
+    (facture) => facture.id == req.params.id
+  );
+  factures.splice(indexFactureToDelete, 1);
   res.json({
-    message: "facture licencié",
+    message: "facture supprimée",
   });
 });
 
 // CLIENTS
 // GET /api/v1/clients
-app.get("/clients", (req, res) => {
+app.get("/api/v1/clients", (req, res) => {
   res.json({
     factures: [
       { id: 1, nomClient: "Auxel", commandes: 2500 },
@@ -88,13 +111,13 @@ app.get("/clients", (req, res) => {
   });
 });
 // GET /api/v1/clients/:id
-app.get("/clients/:id", (req, res) => {
+app.get("/api/v1/clients/:id", (req, res) => {
   res.json({
     factures: [{ id: 1, nomClient: "Auxel", commandes: 880 }],
   });
 });
 // PUT /api/v1/clients/:id
-app.put("/clients/:id", (req, res) => {
+app.put("/api/v1/clients/:id", (req, res) => {
   let newcommandes = req.body.commandes;
   res.json({
     factures: [{ id: 1, nomClient: "Auxel", commandes: newAdress }],
@@ -102,13 +125,13 @@ app.put("/clients/:id", (req, res) => {
   });
 });
 // DELETE /api/v1/clients/:id
-app.delete("/clients/:id", (req, res) => {
+app.delete("/api/v1/clients/:id", (req, res) => {
   res.json({
     message: "clients supprimés",
   });
 });
 // GET /api/v1/clients
-app.get("/clients/:id/commandes", (req, res) => {
+app.get("/api/v1/clients/:id/commandes", (req, res) => {
   res.json({
     factures: [
       { id: 1, nomClient: "Auxel", commandes: 2500 },
@@ -117,7 +140,7 @@ app.get("/clients/:id/commandes", (req, res) => {
   });
 });
 // GET /api/v1/clients/:id
-app.get("/clients/:id/commandes/:id", (req, res) => {
+app.get("/api/v1/clients/:id/commandes/:id", (req, res) => {
   res.json({
     factures: [
       { id: 1, nomClient: "Auxel", commandes: 2500 },
@@ -126,7 +149,7 @@ app.get("/clients/:id/commandes/:id", (req, res) => {
   });
 });
 // PUT /api/v1/clients/:id
-app.put("/clients/:id/commandes/:id", (req, res) => {
+app.put("/api/v1/clients/:id/commandes/:id", (req, res) => {
   let newcommandes = req.body.commandes;
   res.json({
     factures: [{ id: 1, nomClient: "Auxel", commandes: newAdress }],
@@ -134,7 +157,7 @@ app.put("/clients/:id/commandes/:id", (req, res) => {
   });
 });
 // DELETE /api/v1/clients/:id
-app.delete("/clients/:id/commandes/:id", (req, res) => {
+app.delete("/api/v1/clients/:id/commandes/:id", (req, res) => {
   res.json({
     message: "clients supprimés",
   });
