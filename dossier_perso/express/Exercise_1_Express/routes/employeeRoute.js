@@ -1,30 +1,59 @@
 const express = require("express");
+const employees = require("../datas/employees");
+
+const router = express.Router();
 
 // EMPLOYEE
 // GET /api/v1/employee
-app.get("/", (req, res) => {
+router.route("").get((req, res) => {
   res.json({
-    employe: [
-      { id: 1, name: "Claude", adresse: "55 avenue du roi" },
-      { id: 2, name: "Patrick", adresse: "24 rue Victor hugo" },
-    ],
+    employees,
+    message: "ok",
   });
 });
-// GET /api/v1/employee/:id
-app.get("/:id", (req, res) => {
+
+// // GET /api/v1/employee/:id
+router.route("/:id").get((req, res) => {
+  const employe = employees.find((employe) => employe.id == req.params.id);
   res.json({
-    employe: [{ id: 1, name: "Claude", adresse: "55 avenue du roi" }],
+    employe,
   });
 });
-// PUT /api/v1/employee/:id
-app.put("/:id", (req, res) => {
+
+// // POST /api/v1/employee/:id/augmentation
+router.route("/:id/augmentation").put((req, res) => {
+  const montantAugmentation = Number(req.body.augmentation);
+  const employeAugmente = employees.find(
+    (employe) => employe.id == req.params.id
+  );
+  const salary = parseInt(employeAugmente.salary);
+  let newSalary = salary + montantAugmentation;
+  employeAugmente.salary = newSalary;
   res.json({
-    employe: [{ id: 1, name: "Claude", adresse: "55 avenue du roi" }],
+    employeAugmente,
+    Message: `Vous avez obtenu une augmentation de ${montantAugmentation} euros`,
   });
 });
-// DELETE /api/v1/employee/:id
-app.delete("/:id", (req, res) => {
+
+// // PUT /api/v1/employee/:id
+router.route("/:id").put((req, res) => {
+  const employe = employees.find((employe) => employe.id == req.params.id);
+  employe.adress = req.body.adress;
   res.json({
-    employe: [{ id: 1, name: "Claude", adresse: "55 avenue du roi" }],
+    employe,
+    message: "Adresse modifiée",
   });
 });
+
+// // DELETE /api/v1/employee/:id
+router.route("/:id").delete((req, res) => {
+  const indexEmployeeToFire = employees.findIndex(
+    (employe) => employe.id == req.params.id
+  );
+  employees.splice(indexEmployeeToFire, 1);
+  res.json({
+    message: "employé licencié",
+  });
+});
+
+module.exports = router;
