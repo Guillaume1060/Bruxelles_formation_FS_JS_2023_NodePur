@@ -1,59 +1,52 @@
-const employees = require("../datas/employees");
+// const employees = require("../datas/employees");
+const employeeService = require("../services/employeeService.js");
 
 const employeeController = {
   getAll: (req, res) => {
+    let employees = employeeService.getAll();
     res.json({
       employees,
-      message: "ok",
     });
   },
   getOne: (req, res) => {
-    const employe = employees.find((employe) => employe.id == req.params.id);
+    let employe = employeeService.getOne(req.params.id);
     res.json({
       employe,
     });
   },
   update: (req, res) => {
-    const employe = employees.find((employe) => employe.id == req.params.id);
-    employe.adress = req.body.adress;
+    let updatedEmployee = employeeService.update(
+      req.params.id,
+      req.body.adress
+    );
     res.json({
-      employe,
+      updatedEmployee,
       message: "Adresse modifiée",
     });
   },
   delete: (req, res) => {
-    const indexEmployeeToFire = employees.findIndex(
-      (employe) => employe.id == req.params.id
-    );
-    employees.splice(indexEmployeeToFire, 1);
+    let id = parseInt(req.params.id);
+    employeeService.delete(id);
     res.json({
-      message: "employé licencié",
+      message: "employé supprimé",
     });
   },
   augmentation: (req, res) => {
+    let id = parseInt(req.params.id);
     const montantAugmentation = Number(req.body.augmentation);
-    const employeAugmente = employees.find(
-      (employe) => employe.id == req.params.id
-    );
-    const salary = parseInt(employeAugmente.salary);
-    let newSalary = salary + montantAugmentation;
-    employeAugmente.salary = newSalary;
+    let employeAugmente = employeeService.augmentation(id, montantAugmentation);
     res.json({
       employeAugmente,
       Message: `Vous avez obtenu une augmentation de ${montantAugmentation} euros`,
     });
   },
   diminution: (req, res) => {
+    let id = parseInt(req.params.id);
     const montantDiminution = Number(req.body.diminution);
-    const employeDiminue = employees.find(
-      (employe) => employe.id == req.params.id
-    );
-    const salary = parseInt(employeDiminue.salary);
-    let newSalary = salary - montantDiminution;
-    employeDiminue.salary = newSalary;
+    let employeDiminue = employeeService.diminution(id, montantDiminution);
     res.json({
       employeDiminue,
-      Message: `Vous avez obtenu une baisse de ${montantDiminution} euros`,
+      Message: `Vous avez obtenu une diminution de ${montantDiminution} euros`,
     });
   },
 };

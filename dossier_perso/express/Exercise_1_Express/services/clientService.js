@@ -1,6 +1,6 @@
 const clientModel = require("../models/clientModel.js");
 
-const ClientService = {
+const clientService = {
   getAll: () => {
     let allClient = clientModel.getAll();
     return allClient;
@@ -8,7 +8,6 @@ const ClientService = {
 
   getOne: (id) => {
     let oneClient = clientModel.getOne(id);
-    //BAL
     return oneClient;
   },
 
@@ -24,4 +23,4 @@ const ClientService = {
   },
 };
 
-module.exports = ClientService;
+module.exports = clientService;

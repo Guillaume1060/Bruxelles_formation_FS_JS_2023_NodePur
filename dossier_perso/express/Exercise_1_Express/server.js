@@ -20,4 +20,21 @@ app.use("/api/v1/employee", employeeRoute);
 app.use("/api/v1/compta", comptaRoute);
 app.use("/api/v1/clients", clientRoute);
 
+app.all("*", (req, res, next) => {
+  if (res.locals.message != undefined) {
+    responseError = {
+      Message: res.locals.message,
+      ErrorCode: 404,
+    };
+  }
+
+  res.status(404).json(responseError);
+});
+
+app.use((error, req, res, next) => {
+  console.log("Error URL : ", req.url);
+  console.log("Error Message : " + error);
+  res.status(500).json({ Error: req.url, Message: "" + error, ErrorCode: 500 });
+});
+
 app.listen(port, console.log(`le serveur est lancé sur le port ${port}`));

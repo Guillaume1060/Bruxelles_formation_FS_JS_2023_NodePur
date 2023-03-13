@@ -32,8 +32,8 @@ const clientController = {
   },
 };
 
-// TODO j'ai fini controller->service->modèle uniquement pour la route client
-// Finir les trois autres routes.
+// TODO j'ai fini controller->service->modèles finis pour la route client, employee
+// Finir les autres routes.
 // faut-il envoyer le req.body au model pour le maj de la DB ?
 
 module.exports = clientController;
