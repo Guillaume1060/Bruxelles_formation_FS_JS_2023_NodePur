@@ -25,6 +25,7 @@ const factureModel = {
   },
   delete: (id) => {
     let facturePayee = factures.find((facture) => facture.id == id);
+    if (facturePayee == undefined) throw new Error("la facture n existe pas");
     if (facturePayee.paid == true) {
       throw new Error("la facture a déjà été payé");
     } else {
