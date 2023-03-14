@@ -16,18 +16,23 @@ const factureService = {
   },
 
   createOne: (facture) => {
-    return (facturesToPaid = facturetModel.createOne(facture));
+    return facturetModel.createOne(facture);
   },
 
-  update: (id, newFirstName) => {
-    let updateClient = facturetModel.update(id);
-    updateClient.first_name = newFirstName;
-    return updateClient;
+  update: (id, update) => {
+    if (update.amount !== undefined || update.date_echeance !== undefined) {
+      return facturetModel.update(id, update);
+    }
+    if (update.company !== undefined || update.paid !== undefined) {
+      return {
+        errorMessage: `le nom de la compagnie et/ou la validité de facture n'est pas modifiable`,
+      };
+    }
   },
 
   delete: (id) => {
-    let deleteClient = facturetModel.delete(id);
-    return deleteClient;
+    let facturePayee = facturetModel.delete(id);
+    return facturePayee;
   },
 };
 
